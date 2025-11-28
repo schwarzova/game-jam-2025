@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://qxspnjhh8pdq"]
+
+[ext_resource type="PackedScene" uid="uid://ctedxps1ojk1y" path="res://scenes/tiles/tile_base.tscn" id="1_tr8uq"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tr8uq"]
+albedo_color = Color(3.128499e-07, 0.28216192, 0.24891537, 1)
+
+[node name="TileLadderEnd" instance=ExtResource("1_tr8uq")]
+kind = 4
+
+[node name="MeshInstance3D" parent="." index="0"]
+material_override = SubResource("StandardMaterial3D_tr8uq")

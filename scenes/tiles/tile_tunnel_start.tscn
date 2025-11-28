@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://coyffrqmut8pp"]
+
+[ext_resource type="PackedScene" uid="uid://ctedxps1ojk1y" path="res://scenes/tiles/tile_base.tscn" id="1_gf0tp"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gf0tp"]
+albedo_color = Color(0.97793025, 0.84577215, 0.57791513, 1)
+
+[node name="TileTunnelStart" instance=ExtResource("1_gf0tp")]
+kind = 5
+
+[node name="MeshInstance3D" parent="." index="0"]
+material_override = SubResource("StandardMaterial3D_gf0tp")

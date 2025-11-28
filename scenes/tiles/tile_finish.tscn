@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://djtwgjo720mkf"]
+
+[ext_resource type="PackedScene" uid="uid://ctedxps1ojk1y" path="res://scenes/tiles/tile_base.tscn" id="1_gsdv5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gsdv5"]
+albedo_color = Color(0.17107528, 0.13306975, 0.91495943, 1)
+
+[node name="TileFinish" instance=ExtResource("1_gsdv5")]
+kind = 2
+
+[node name="MeshInstance3D" parent="." index="0"]
+material_override = SubResource("StandardMaterial3D_gsdv5")

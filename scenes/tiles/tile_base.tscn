@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://ctedxps1ojk1y"]
+
+[ext_resource type="Script" uid="uid://ln1cd0fkt7yv" path="res://scenes/tiles/tile_base.gd" id="1_ahqsy"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_alasw"]
+
+[node name="TileBase" type="Node3D"]
+script = ExtResource("1_ahqsy")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_alasw")
+
+[node name="PlayerSpot" type="Marker3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)

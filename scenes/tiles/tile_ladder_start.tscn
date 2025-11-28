@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://du5b6e3lr32bj"]
+
+[ext_resource type="PackedScene" uid="uid://ctedxps1ojk1y" path="res://scenes/tiles/tile_base.tscn" id="1_cm6jk"]
+[ext_resource type="PackedScene" uid="uid://duoewyx21s0rv" path="res://assets/tile/tile-leader.glb" id="2_1ocs4"]
+
+[node name="TileLadderStart" instance=ExtResource("1_cm6jk")]
+kind = 3
+
+[node name="tile-leader" parent="." index="2" instance=ExtResource("2_1ocs4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08603853, -0.034299076)

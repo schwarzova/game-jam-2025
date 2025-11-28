@@ -1,0 +1,30 @@
+[gd_scene load_steps=9 format=3 uid="uid://do67rdb0rrcv7"]
+
+[ext_resource type="Script" uid="uid://brred7b7k80n5" path="res://scenes/game.gd" id="1_gee14"]
+[ext_resource type="PackedScene" uid="uid://bxk2osu6r2ehu" path="res://scenes/tiles/tile_normal.tscn" id="2_0tnpc"]
+[ext_resource type="PackedScene" uid="uid://do20dfkkaghj4" path="res://scenes/tiles/tile_start.tscn" id="3_vtaks"]
+[ext_resource type="PackedScene" uid="uid://djtwgjo720mkf" path="res://scenes/tiles/tile_finish.tscn" id="4_kvpfn"]
+[ext_resource type="PackedScene" uid="uid://du5b6e3lr32bj" path="res://scenes/tiles/tile_ladder_start.tscn" id="5_dinhu"]
+[ext_resource type="PackedScene" uid="uid://qxspnjhh8pdq" path="res://scenes/tiles/tile_ladder_end.tscn" id="6_kvuet"]
+[ext_resource type="PackedScene" uid="uid://coyffrqmut8pp" path="res://scenes/tiles/tile_tunnel_start.tscn" id="7_trtic"]
+[ext_resource type="PackedScene" uid="uid://5uqeu87tsrs5" path="res://scenes/tiles/tile_tunnel_end.tscn" id="8_ir15t"]
+
+[node name="Game" type="Node3D"]
+script = ExtResource("1_gee14")
+tile_normal_scene = ExtResource("2_0tnpc")
+tile_start_scene = ExtResource("3_vtaks")
+tile_goal_scene = ExtResource("4_kvpfn")
+tile_ladder_start_scene = ExtResource("5_dinhu")
+tile_ladder_end_scene = ExtResource("6_kvuet")
+tile_tunnel_start_scene = ExtResource("7_trtic")
+tile_tunnel_end_scene = ExtResource("8_ir15t")
+
+[node name="TilesRoot" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.35184163, -0.93605953, 0, 0.93605953, 0.35184163, 4.1810036, -7.5700912, 8.973663)
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.8813035, 0.47255075, 0, -0.3433434, -0.64033276, -0.6870875, -0.3246837, -0.6055326, 0.72657466, 0, 60, 0)
+top_level = true
