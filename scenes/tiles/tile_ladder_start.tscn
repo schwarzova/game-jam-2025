@@ -8,3 +8,5 @@ kind = 3
 
 [node name="tile-leader" parent="." index="2" instance=ExtResource("2_1ocs4")]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.03659147, 0.09024757)
+
+[editable path="tile-leader"]
