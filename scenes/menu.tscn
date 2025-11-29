@@ -1,0 +1,140 @@
+[gd_scene load_steps=9 format=3 uid="uid://ctdenm4gkpovx"]
+
+[ext_resource type="Texture2D" uid="uid://dun7x73mdey4q" path="res://assets/UI/menu/minus.png" id="1_con2f"]
+[ext_resource type="Texture2D" uid="uid://cjsh0jo8f2lwh" path="res://assets/UI/menu/plus.png" id="2_mhnvy"]
+[ext_resource type="Texture2D" uid="uid://dpdyk3iej7f0n" path="res://assets/UI/menu/slider-empty.png" id="3_4ytvr"]
+[ext_resource type="Shader" uid="uid://dv2wc4o2iwefd" path="res://scenes/menu.gdshader" id="4_4ytvr"]
+[ext_resource type="Texture2D" uid="uid://d3s0y3dagy6v8" path="res://assets/UI/menu/dot.png" id="5_g3eks"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_con2f"]
+resource_local_to_scene = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v86rl"]
+shader = ExtResource("4_4ytvr")
+shader_parameter/background_color = Color(0.02, 0.04, 0.12, 1)
+shader_parameter/aspect_ratio = 1.0
+shader_parameter/density = 0.8
+shader_parameter/layer_parascale = 4
+shader_parameter/star_speed = Vector2(0, 0)
+shader_parameter/star_wave = Vector2(0, 0)
+shader_parameter/star_size = 0.02
+shader_parameter/star_rotate_speed = 0.5
+shader_parameter/twinkle_effect = 0.6
+shader_parameter/twinkle_speed = 0.3
+shader_parameter/pixelate_enabled = false
+shader_parameter/pixelate_count = 1000.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_g3eks"]
+font_size = 30
+font_color = Color(0.5411765, 0.9529412, 1, 1)
+outline_color = Color(0, 0, 0, 1)
+shadow_color = Color(0, 0.32941177, 0, 1)
+
+[node name="Menu" type="Control"]
+material = SubResource("CanvasItemMaterial_con2f")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="shader-sky" type="Sprite2D" parent="."]
+light_mask = 0
+visibility_layer = 512
+material = SubResource("ShaderMaterial_v86rl")
+position = Vector2(961.00006, 539.99994)
+scale = Vector2(1920, 1078)
+texture = ExtResource("5_g3eks")
+
+[node name="backdrop" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(968, 472.99997)
+scale = Vector2(560, 562.99994)
+texture = ExtResource("5_g3eks")
+
+[node name="Players" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -46.0
+offset_top = 200.0
+offset_right = 46.0
+offset_bottom = 260.0
+grow_horizontal = 2
+
+[node name="Players" type="Label" parent="Players"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Počet hráčů"
+label_settings = SubResource("LabelSettings_g3eks")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Players"]
+custom_minimum_size = Vector2(490, 0)
+layout_mode = 2
+
+[node name="players-minus" type="Button" parent="Players/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+icon = ExtResource("1_con2f")
+
+[node name="players-plus" type="Button" parent="Players/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+icon = ExtResource("2_mhnvy")
+
+[node name="players-bar" type="Sprite2D" parent="Players/HBoxContainer"]
+position = Vector2(245, 33)
+texture = ExtResource("3_4ytvr")
+
+[node name="Sounds" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 715.0
+offset_top = 351.0
+offset_right = 1205.0
+offset_bottom = 465.0
+
+[node name="Sounds" type="Label" parent="Sounds"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Zvuky"
+label_settings = SubResource("LabelSettings_g3eks")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Sounds"]
+custom_minimum_size = Vector2(490, 0)
+layout_mode = 2
+
+[node name="sounds-minus" type="Button" parent="Sounds/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+icon = ExtResource("1_con2f")
+
+[node name="sounds-plus" type="Button" parent="Sounds/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+icon = ExtResource("2_mhnvy")
+
+[node name="sounds-bar" type="Sprite2D" parent="Sounds/HBoxContainer"]
+position = Vector2(245, 33)
+texture = ExtResource("3_4ytvr")
+
+[node name="StartGame" type="Button" parent="."]
+modulate = Color(1.3128003, 18.892157, 17.413149, 1)
+top_level = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -74.0
+offset_top = 75.0
+offset_right = 76.0
+offset_bottom = 135.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 30
+text = "Start hry"
