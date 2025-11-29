@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://do67rdb0rrcv7"]
+[gd_scene load_steps=14 format=3 uid="uid://do67rdb0rrcv7"]
 
 [ext_resource type="Script" uid="uid://brred7b7k80n5" path="res://scenes/game.gd" id="1_gee14"]
 [ext_resource type="PackedScene" uid="uid://bxk2osu6r2ehu" path="res://scenes/tiles/tile_normal.tscn" id="2_0tnpc"]
@@ -8,6 +8,15 @@
 [ext_resource type="PackedScene" uid="uid://qxspnjhh8pdq" path="res://scenes/tiles/tile_ladder_end.tscn" id="6_kvuet"]
 [ext_resource type="PackedScene" uid="uid://coyffrqmut8pp" path="res://scenes/tiles/tile_tunnel_start.tscn" id="7_trtic"]
 [ext_resource type="PackedScene" uid="uid://5uqeu87tsrs5" path="res://scenes/tiles/tile_tunnel_end.tscn" id="8_ir15t"]
+[ext_resource type="PackedScene" uid="uid://cytuh00kg0t2" path="res://scenes/player/player.tscn" id="9_0tnpc"]
+[ext_resource type="Texture2D" uid="uid://cgj7xkljda850" path="res://assets/test/red-dice-png-3.png" id="10_kvpfn"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_vtaks"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gee14"]
+albedo_color = Color(0.7912117, 0, 0.26666272, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gee14"]
 
 [node name="Game" type="Node3D"]
 script = ExtResource("1_gee14")
@@ -18,13 +27,64 @@ tile_ladder_start_scene = ExtResource("5_dinhu")
 tile_ladder_end_scene = ExtResource("6_kvuet")
 tile_tunnel_start_scene = ExtResource("7_trtic")
 tile_tunnel_end_scene = ExtResource("8_ir15t")
+player_scene = ExtResource("9_0tnpc")
 
 [node name="TilesRoot" type="Node3D" parent="."]
 
+[node name="PlayersRoot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.7683716e-07, 0, 0)
+
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.35184163, -0.93605953, 0, 0.93605953, 0.35184163, 4.1810036, -7.5700912, 8.973663)
+transform = Transform3D(0.95471406, 0.08300678, -0.28571123, -0.29752484, 0.2663567, -0.9168059, 0, 0.9602937, 0.27899107, -5.3328094, -20.371653, 11.360691)
 current = true
+fov = 32.7
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.8813035, 0.47255075, 0, -0.3433434, -0.64033276, -0.6870875, -0.3246837, -0.6055326, 0.72657466, 0, 60, 0)
 top_level = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+follow_viewport_enabled = true
+
+[node name="HUD" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BottomRightActions" type="BoxContainer" parent="CanvasLayer/HUD"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1700.0
+offset_top = 800.0
+offset_right = 1700.0
+offset_bottom = 800.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.28, 0.28)
+vertical = true
+
+[node name="BtnDice" type="TextureButton" parent="CanvasLayer/HUD/BottomRightActions"]
+layout_mode = 2
+texture_normal = ExtResource("10_kvpfn")
+
+[node name="BtnCourage" type="TextureButton" parent="CanvasLayer/HUD/BottomRightActions"]
+visible = false
+material = SubResource("CanvasItemMaterial_vtaks")
+layout_mode = 2
+texture_normal = ExtResource("10_kvpfn")
+
+[node name="BtnDrop" type="TextureButton" parent="CanvasLayer/HUD/BottomRightActions"]
+layout_mode = 2
+
+[node name="Start" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.99939084, -0.034899496, 0, 0.034899496, 0.99939084, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Start"]
+material_override = SubResource("StandardMaterial3D_gee14")
+mesh = SubResource("BoxMesh_gee14")
