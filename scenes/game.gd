@@ -20,6 +20,12 @@ var current_player_index: int = 0
 @onready var btn_dice = $CanvasLayer/HUD/BottomRightActions/BtnDice
 @onready var btn_courage = $CanvasLayer/HUD/BottomRightActions/BtnCourage
 @onready var btn_drop = $CanvasLayer/HUD/BottomRightActions/BtnDrop
+@onready var tunnel_panel = $CanvasLayer/HUD/TunnelChoice
+@onready var btn_tunnel_left = $CanvasLayer/HUD/TunnelChoice/LeftTunnel
+@onready var btn_tunnel_right = $CanvasLayer/HUD/TunnelChoice/RightTunnel
+
+var _tunnel_choice: int = -1  # -1 = no, 0 = left, 1 = right
+var tunnel_left_is_good: Dictionary = {}
 
 func _ready() -> void:
 	_build_board()
@@ -60,11 +66,14 @@ func _build_board():
 			index += 1
 			
 func _setup_special_tiles():
-	# Příklad: žebřík z 5 na 22
 	_make_ladder(5, 22)
+	_make_ladder(16, 38)
+	_make_ladder(40, 88)
+	_make_ladder(59, 95)
 
-	# Příklad: tunel z 30 na 12
 	_make_tunnel(30, 12)
+	_make_tunnel(65, 8)
+	_make_tunnel(10, 4)
 	
 func _replace_tile(index: int, scene: PackedScene) -> Node3D:
 	var old_tile = tiles[index]
@@ -95,10 +104,14 @@ func _make_tunnel(start_index: int, good_index: int):
 	var end_tile = _replace_tile(good_index, tile_tunnel_end_scene)
 	end_tile.kind = end_tile.TileKind.TUNNEL_END
 	
+	tunnel_left_is_good[start_index] = randf() < 0.5
+	
 func _setup_ui_signals():
 	btn_dice.pressed.connect(_on_dice_pressed)
 	btn_courage.pressed.connect(_on_courage_pressed)
 	btn_drop.pressed.connect(_on_drop_pressed)
+	btn_tunnel_left.pressed.connect(_on_tunnel_left_pressed)
+	btn_tunnel_right.pressed.connect(_on_tunnel_right_pressed)
 	
 func _spawn_players(num_humans: int, num_enemies: int):
 	players.clear()
@@ -194,12 +207,54 @@ func _check_special_tile(player) -> void:
 		Tile.TileKind.LADDER_START:
 			await _handle_ladder(player, tile)
 
-		#Tile.TileKind.TUNNEL_START:
-			#await _handle_tunnel(player, tile)
+		Tile.TileKind.TUNNEL_START:
+			await  _handle_tunnel(player, tile)
 
 		_:
 			# nic speciálního
 			pass
+			
+func _on_tunnel_left_pressed():
+	_tunnel_choice = 0
+
+func _on_tunnel_right_pressed():
+	_tunnel_choice = 1
+	
+func _wait_for_tunnel_choice() -> int:
+	_tunnel_choice = -1
+	tunnel_panel.visible = true
+
+	# čekáme, dokud hráč neklikne levý/pravý
+	while _tunnel_choice == -1:
+		await get_tree().process_frame
+
+	tunnel_panel.visible = false
+	return _tunnel_choice
+			
+func _handle_tunnel(player, tile: Tile) -> void:
+	if tile.jump_target_index_1 < 0 or tile.jump_target_index_2 < 0:
+		push_warning("Tunnel start tile %d nemá oba targety nastavené" % tile.index)
+		return
+
+	print("Hráč", player.player_index, "stojí na tunelu", tile.index, "– čekám na volbu", tunnel_left_is_good.get(tile.index, true))
+
+	var choice := await _wait_for_tunnel_choice()
+	var target_index: int
+	var left_is_good: bool = tunnel_left_is_good.get(tile.index, true)
+
+	if choice == 0:
+		target_index = tile.jump_target_index_1 if left_is_good else tile.jump_target_index_2
+	else:
+		target_index = tile.jump_target_index_2 if left_is_good else tile.jump_target_index_1
+
+	if target_index < 0 or target_index >= tiles.size():
+		push_warning("Tunnel target index %d je mimo rozsah" % target_index)
+		return
+
+	print("Tunel vede na index", target_index)
+
+	await player.move_to_index(target_index)
+	player.current_tile_index = target_index
 			
 func _handle_ladder(player, tile: Tile) -> void:
 	if tile.jump_target_index_1 < 0:
@@ -210,9 +265,6 @@ func _handle_ladder(player, tile: Tile) -> void:
 	if target_index < 0 or target_index >= tiles.size():
 		push_warning("Ladder target index %d je mimo rozsah" % target_index)
 		return
-
-	var target_tile := tiles[target_index]
-	print("Ladder z", tile.index, "na", target_index)
 
 	await player.move_to_index(target_index)
 	player.current_tile_index = target_index
