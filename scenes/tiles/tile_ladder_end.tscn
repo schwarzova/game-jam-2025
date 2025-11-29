@@ -14,4 +14,4 @@ visible = false
 material_override = SubResource("StandardMaterial3D_tr8uq")
 
 [node name="tile-leaderEnd" parent="." index="2" instance=ExtResource("2_cierj")]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.16109473, -0.28684634, -0.0015313625)
+transform = Transform3D(1.9106855e-15, 4.371139e-08, 1, 1, -4.371139e-08, 0, 4.371139e-08, 1, -4.371139e-08, 0.16966027, -1.2112281, -0.5030305)
