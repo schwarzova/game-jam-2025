@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://do20dfkkaghj4"]
+[gd_scene load_steps=4 format=3 uid="uid://do20dfkkaghj4"]
 
 [ext_resource type="PackedScene" uid="uid://ctedxps1ojk1y" path="res://scenes/tiles/tile_base.tscn" id="1_2cneh"]
+[ext_resource type="PackedScene" uid="uid://7p3cvba6tfvd" path="res://assets/tile/tile-start.glb" id="2_h4nws"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2cneh"]
 albedo_color = Color(0.9999998, 0.028623357, 0.549406, 1)
@@ -9,4 +10,16 @@ albedo_color = Color(0.9999998, 0.028623357, 0.549406, 1)
 kind = 1
 
 [node name="MeshInstance3D" parent="." index="0"]
+visible = false
 material_override = SubResource("StandardMaterial3D_2cneh")
+
+[node name="tile-start" parent="." index="2" instance=ExtResource("2_h4nws")]
+transform = Transform3D(1.9106855e-15, -4.371139e-08, -1, -1, -4.371139e-08, 0, -4.371139e-08, 1, -4.371139e-08, 0, 0, 0)
+
+[node name="flag" parent="tile-start/flag-pole" index="0"]
+transform = Transform3D(1.9007082e-07, 16.249943, 0, -0.08121038, 3.8032573e-05, 0, 0, 0, 16.249943, 1.3475838, 0.09375763, -0.81819916)
+
+[node name="AnimationPlayer" parent="tile-start" index="6"]
+autoplay = "flagAction"
+
+[editable path="tile-start"]
