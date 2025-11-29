@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://hh80q0qynxld"]
+
+[ext_resource type="PackedScene" uid="uid://dqvcysh0msil7" path="res://assets/tile/tile-leaderEnd.glb" id="1_1k5ha"]
+[ext_resource type="Material" uid="uid://cld2c4ce5efhc" path="res://assets/tile/materials/leaderMaterial.tres" id="2_4qvf4"]
+
+[node name="tile-leaderEnd" instance=ExtResource("1_1k5ha")]
+
+[node name="Cylinder_007" parent="." index="3"]
+material_override = ExtResource("2_4qvf4")
+
+[node name="Cylinder_008" parent="Cylinder_007" index="0"]
+material_override = ExtResource("2_4qvf4")
