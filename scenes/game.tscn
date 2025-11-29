@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://do67rdb0rrcv7"]
+[gd_scene load_steps=18 format=3 uid="uid://do67rdb0rrcv7"]
 
 [ext_resource type="Script" uid="uid://brred7b7k80n5" path="res://scenes/game.gd" id="1_gee14"]
 [ext_resource type="PackedScene" uid="uid://bxk2osu6r2ehu" path="res://scenes/tiles/tile_normal.tscn" id="2_0tnpc"]
@@ -9,10 +9,11 @@
 [ext_resource type="PackedScene" uid="uid://coyffrqmut8pp" path="res://scenes/tiles/tile_tunnel_start.tscn" id="7_trtic"]
 [ext_resource type="PackedScene" uid="uid://5uqeu87tsrs5" path="res://scenes/tiles/tile_tunnel_end.tscn" id="8_ir15t"]
 [ext_resource type="PackedScene" uid="uid://cytuh00kg0t2" path="res://scenes/player/player.tscn" id="9_0tnpc"]
-[ext_resource type="Texture2D" uid="uid://cgj7xkljda850" path="res://assets/test/red-dice-png-3.png" id="10_kvpfn"]
+[ext_resource type="Texture2D" uid="uid://clu4mm2gtbbq4" path="res://assets/UI/ingame/kostky.png" id="10_trtic"]
 [ext_resource type="Texture2D" uid="uid://h4svmfnhady" path="res://assets/test/left.png" id="11_dinhu"]
-[ext_resource type="Texture2D" uid="uid://iky115thm77f" path="res://assets/test/drop.png" id="11_kvuet"]
+[ext_resource type="Texture2D" uid="uid://u4pfvcam3f0s" path="res://assets/UI/ingame/kards.png" id="11_trtic"]
 [ext_resource type="Texture2D" uid="uid://bi2bwclowy147" path="res://assets/test/right.jpg" id="12_kvuet"]
+[ext_resource type="Texture2D" uid="uid://3inskx5q6v2w" path="res://assets/UI/ingame/skok.png" id="12_trtic"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_vtaks"]
 
@@ -64,9 +65,9 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 1700.0
-offset_top = 800.0
+offset_top = 400.0
 offset_right = 1700.0
-offset_bottom = 800.0
+offset_bottom = 1728.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.28, 0.28)
@@ -74,17 +75,16 @@ vertical = true
 
 [node name="BtnDice" type="TextureButton" parent="CanvasLayer/HUD/BottomRightActions"]
 layout_mode = 2
-texture_normal = ExtResource("10_kvpfn")
+texture_normal = ExtResource("10_trtic")
 
 [node name="BtnCourage" type="TextureButton" parent="CanvasLayer/HUD/BottomRightActions"]
-visible = false
 material = SubResource("CanvasItemMaterial_vtaks")
 layout_mode = 2
-texture_normal = ExtResource("10_kvpfn")
+texture_normal = ExtResource("11_trtic")
 
 [node name="BtnDrop" type="TextureButton" parent="CanvasLayer/HUD/BottomRightActions"]
 layout_mode = 2
-texture_normal = ExtResource("11_kvuet")
+texture_normal = ExtResource("12_trtic")
 
 [node name="TunnelChoice" type="HBoxContainer" parent="CanvasLayer/HUD"]
 visible = false
@@ -108,6 +108,32 @@ texture_normal = ExtResource("11_dinhu")
 [node name="RightTunnel" type="TextureButton" parent="CanvasLayer/HUD/TunnelChoice"]
 layout_mode = 2
 texture_normal = ExtResource("12_kvuet")
+
+[node name="CourageCardPanel" type="BoxContainer" parent="CanvasLayer/HUD"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -42.5
+offset_right = 20.0
+offset_bottom = 42.5
+grow_horizontal = 2
+grow_vertical = 2
+vertical = true
+
+[node name="CardTitle" type="Label" parent="CanvasLayer/HUD/CourageCardPanel"]
+layout_mode = 2
+
+[node name="CardDescription" type="Label" parent="CanvasLayer/HUD/CourageCardPanel"]
+layout_mode = 2
+
+[node name="BtnOk" type="Button" parent="CanvasLayer/HUD/CourageCardPanel"]
+layout_mode = 2
+text = "OK"
 
 [node name="Start" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.99939084, -0.034899496, 0, 0.034899496, 0.99939084, 0, 0, 0)

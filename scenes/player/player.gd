@@ -5,10 +5,13 @@ enum PlayerType { HUMAN, ENEMY }
 @export var player_type: PlayerType = PlayerType.HUMAN
 @export var player_index: int = 0      # 0..3
 @export var color: Color = Color(1, 1, 1)
-var current_tile_index: int = 0
+@onready var active_indicator: Node3D = $ActiveIndicator
 
+var current_tile_index: int = 0
+var is_on_turn: bool = false
 var board                    # odkaz na Game/Board
 var is_moving: bool = false
+var is_finished: bool = false 
 
 var positions = [
 	Vector3(-0.2, -0.3, -0.2), # hráč 0
@@ -16,7 +19,6 @@ var positions = [
 	Vector3(-0.1, -0.8,  -0.2), # hráč 2
 	Vector3(0.3, -0.8,  -0.2), # hráč 3
 ]
-
 
 @onready var model = $Model
 @onready var anim_player: AnimationPlayer = $playerglb/AnimationPlayer
@@ -58,3 +60,8 @@ func move_to_index(tile_index: int) -> void:
 	await tween.finished
 	current_tile_index = tile_index
 	
+
+func set_on_turn(active: bool) -> void:
+	is_on_turn = active
+	if active_indicator:
+		active_indicator.visible = active

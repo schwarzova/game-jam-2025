@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://coyffrqmut8pp"]
 
 [ext_resource type="PackedScene" uid="uid://ctedxps1ojk1y" path="res://scenes/tiles/tile_base.tscn" id="1_gf0tp"]
-[ext_resource type="PackedScene" uid="uid://4c2c4h7igj38" path="res://assets/tile/tile-portal.glb" id="2_2dyph"]
+[ext_resource type="PackedScene" uid="uid://cbw3i82hapou5" path="res://assets/tile/portal.glb" id="3_naf4c"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gf0tp"]
 albedo_color = Color(0.97793025, 0.84577215, 0.57791513, 1)
@@ -13,5 +13,5 @@ kind = 5
 visible = false
 material_override = SubResource("StandardMaterial3D_gf0tp")
 
-[node name="tile-portal" parent="." index="2" instance=ExtResource("2_2dyph")]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.00972271, 0.060372412, 0.13493752)
+[node name="portal" parent="." index="2" instance=ExtResource("3_naf4c")]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.009003878, 0.06459063, 0.13566107)

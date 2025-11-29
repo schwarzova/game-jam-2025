@@ -3,6 +3,8 @@ extends Node3D
 const BOARD_WIDTH := 10
 const BOARD_HEIGHT := 10
 
+const CourageCardManagerIns = preload("res://scripts/cards.gd")
+
 @export var tile_normal_scene: PackedScene
 @export var tile_start_scene: PackedScene
 @export var tile_goal_scene: PackedScene
@@ -23,15 +25,26 @@ var current_player_index: int = 0
 @onready var tunnel_panel = $CanvasLayer/HUD/TunnelChoice
 @onready var btn_tunnel_left = $CanvasLayer/HUD/TunnelChoice/LeftTunnel
 @onready var btn_tunnel_right = $CanvasLayer/HUD/TunnelChoice/RightTunnel
+@onready var courage_panel = $CanvasLayer/HUD/CourageCardPanel
+@onready var courage_title = $CanvasLayer/HUD/CourageCardPanel/CardTitle
+@onready var courage_desc  = $CanvasLayer/HUD/CourageCardPanel/CardDescription
+@onready var courage_ok    = $CanvasLayer/HUD/CourageCardPanel/BtnOk
 
 var _tunnel_choice: int = -1  # -1 = no, 0 = left, 1 = right
 var tunnel_left_is_good: Dictionary = {}
+
+var rank: Array = []
+
+var card_manager: CourageCardManagerIns
+var _courage_card_ack = false
+var is_ui_locked: bool = false
 
 func _ready() -> void:
 	_build_board()
 	_setup_special_tiles()
 	_setup_ui_signals()
 	_spawn_players(2, 2) # třeba default – 2 hráči, 2 nepřátelé
+	card_manager = CourageCardManager.new()
 	
 func _build_board():
 	tiles.resize(BOARD_WIDTH * BOARD_HEIGHT)
@@ -66,7 +79,7 @@ func _build_board():
 			index += 1
 			
 func _setup_special_tiles():
-	_make_ladder(5, 22)
+	_make_ladder(5, 23)
 	_make_ladder(16, 38)
 	_make_ladder(40, 88)
 	_make_ladder(59, 95)
@@ -112,6 +125,7 @@ func _setup_ui_signals():
 	btn_drop.pressed.connect(_on_drop_pressed)
 	btn_tunnel_left.pressed.connect(_on_tunnel_left_pressed)
 	btn_tunnel_right.pressed.connect(_on_tunnel_right_pressed)
+	courage_ok.pressed.connect(_on_courage_ok_pressed)
 	
 func _spawn_players(num_humans: int, num_enemies: int):
 	players.clear()
@@ -174,15 +188,25 @@ func _spawn_players(num_humans: int, num_enemies: int):
 	
 func _start_turn():
 	var active_player = players[current_player_index]
+	
+	if active_player.current_tile_index == 99:
+		_next_turn()
+		return
+	
+	active_player.set_on_turn(true)
 	# tady můžeš updatnout UI – zvýraznit aktuálního hráče atd.
 	print("Na tahu je hráč: ", current_player_index, " typ: ", active_player.player_type)
 
-
 func _next_turn():
+	var active_player = players[current_player_index]
 	current_player_index = (current_player_index + 1) % players.size()
+	active_player.set_on_turn(false)
 	_start_turn()
 	
 func _on_dice_pressed():
+	if is_ui_locked:
+		return
+		
 	var active_player = players[current_player_index]
 	if active_player.is_moving:
 		return
@@ -195,6 +219,14 @@ func _on_dice_pressed():
 	
 func on_player_finished_move(player):
 	await _check_special_tile(player)
+	
+	if player.current_tile_index == 99:
+		player.is_finished = true 
+		rank.append(player)
+		
+	if rank.size() == 3:
+		print("Game DONE", rank)
+		
 	_next_turn()
 	
 func _check_special_tile(player) -> void:
@@ -270,6 +302,9 @@ func _handle_ladder(player, tile: Tile) -> void:
 	player.current_tile_index = target_index
 	
 func _on_drop_pressed():
+	if is_ui_locked:
+		return
+		
 	var active_player = players[current_player_index]
 	if active_player.is_moving:
 		return
@@ -287,13 +322,102 @@ func _on_drop_pressed():
 
 	await active_player.move_to_index(target_index)
 	active_player.current_tile_index = target_index
+	await _check_special_tile(active_player)
 	_next_turn()
 	
-func _on_courage_pressed():
+func _on_courage_ok_pressed():
+	_courage_card_ack = true
+	
+func _show_courage_card(card: Dictionary) -> void:
+	is_ui_locked = true
+	courage_title.text = str(card["name"])
+	courage_desc.text = str(card["description"])
+	courage_panel.visible = true
+	_courage_card_ack = false
+
+func _wait_for_courage_ok() -> void:
+	while not _courage_card_ack:
+		await get_tree().process_frame
+	courage_panel.visible = false
+	is_ui_locked = false
+	
+func _on_courage_pressed() -> void:
+	if is_ui_locked:
+		return
+		
 	var active_player = players[current_player_index]
 	if active_player.is_moving:
 		return
 
-	print("Karta odvahy ještě není implementovaná 🙂")
-	# sem později doplníš logiku (např. přidat buff, větší hod kostkou, atd.)
+	var card = card_manager.draw_random()
+
+	_show_courage_card(card)
+	await _wait_for_courage_ok()
+
+	await card_manager.apply_card(card, self, active_player)
+
 	_next_turn()
+	
+func _find_nearest_tile_of_kind(from_index, kinds) -> int:
+	var best_index := -1
+	var best_dist := 999999
+
+	for i in range(tiles.size()):
+		var t = tiles[i]
+		if t.kind in kinds:
+			var d = abs(i - from_index)
+			if d < best_dist:
+				best_dist = d
+				best_index = i
+
+	return best_index
+	
+func _get_last_player():
+	var worst = null
+	var worst_index := 999999
+
+	for p in players:
+		if (worst == null or p.current_tile_index < worst_index) and !p.is_finished:
+			worst = p
+			worst_index = p.current_tile_index
+
+	return worst
+
+func _card_swap_with_last(player) -> void:
+	var last = _get_last_player()
+	if last == null or last == player:
+		print("Žádný jiný poslední hráč k výměně.")
+		return
+
+	_swap_players_positions(player, last)
+	
+func _get_leader_player():
+	var best = null
+	var best_index := -1
+
+	for p in players:
+		if (best == null or p.current_tile_index > best_index) and !p.is_finished:
+			best = p
+			best_index = p.current_tile_index
+
+	return best
+
+func _swap_players_positions(p1, p2) -> void:
+	var idx1 = p1.current_tile_index
+	var idx2 = p2.current_tile_index
+
+	# můžeš je klidně jen teleportovat, nebo udělat tweens
+	var tmp_pos = p1.global_position
+	p1.global_position = p2.global_position
+	p2.global_position = tmp_pos
+
+	p1.current_tile_index = idx2
+	p2.current_tile_index = idx1
+
+func _card_swap_with_leader(player) -> void:
+	var leader = _get_leader_player()
+	if leader == null or leader == player:
+		print("Žádný jiný leader k výměně.")
+		return
+
+	_swap_players_positions(player, leader)

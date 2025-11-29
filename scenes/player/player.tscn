@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://cytuh00kg0t2"]
+[gd_scene load_steps=7 format=3 uid="uid://cytuh00kg0t2"]
 
 [ext_resource type="Script" uid="uid://dl2qmyhxqroe4" path="res://scenes/player/player.gd" id="1_8afob"]
 [ext_resource type="PackedScene" uid="uid://b7m44fp7o2jpp" path="res://assets/player/player-animations.glb" id="2_dovo2"]
@@ -6,6 +6,16 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8afob"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_8afob"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_dovo2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gmlin"]
+albedo_color = Color(0.9999997, 0.34425727, 0.99007136, 1)
+roughness = 0.3
+emission = Color(0.9845397, 0.343063, 0.9289412, 1)
+emission_energy_multiplier = 11.8
+emission_operator = 1
+emission_on_uv2 = true
 
 [node name="Player" type="Node3D"]
 script = ExtResource("1_8afob")
@@ -232,5 +242,13 @@ bones/214/scale = Vector3(1, 1.0000002, 1.0000002)
 
 [node name="AnimationPlayer" parent="playerglb" index="2"]
 autoplay = "Idle"
+
+[node name="ActiveIndicator" type="Node3D" parent="."]
+transform = Transform3D(0.11, 0, 0, 0, -4.808253e-09, -0.11, 0, 0.11, -4.808253e-09, 0.01820147, 0, 1.5049632)
+visible = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ActiveIndicator"]
+mesh = SubResource("CapsuleMesh_dovo2")
+surface_material_override/0 = SubResource("StandardMaterial3D_gmlin")
 
 [editable path="playerglb"]
