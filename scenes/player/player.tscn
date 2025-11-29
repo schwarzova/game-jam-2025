@@ -251,4 +251,7 @@ visible = false
 mesh = SubResource("CapsuleMesh_dovo2")
 surface_material_override/0 = SubResource("StandardMaterial3D_gmlin")
 
+[node name="FollowCamera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.01160612, -0.9999326, 0, 0.9999326, 0.01160612, -0.22478163, -1.5427141, 1.4497979)
+
 [editable path="playerglb"]

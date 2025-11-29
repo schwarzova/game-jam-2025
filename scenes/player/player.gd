@@ -19,7 +19,10 @@ var positions = [
 	Vector3(-0.1, -0.8,  -0.2), # hráč 2
 	Vector3(0.3, -0.8,  -0.2), # hráč 3
 ]
+signal movement_started(player)
+signal movement_finished(player)
 
+@onready var follow_camera: Camera3D = $FollowCamera
 @onready var model = $Model
 @onready var anim_player: AnimationPlayer = $playerglb/AnimationPlayer
 
@@ -34,8 +37,9 @@ func move_steps(steps: int) -> void:
 		return
 
 	is_moving = true
+	movement_started.emit(self)
 	anim_player.play("Walk", -1,1.0 ,true)
-	anim_player.speed_scale= 7
+	anim_player.speed_scale= 4
 	var target = min(current_tile_index + steps, board.tiles.size() - 1)
 
 	for i in range(current_tile_index + 1, target + 1):
@@ -46,19 +50,22 @@ func move_steps(steps: int) -> void:
 	anim_player.speed_scale= 1
 	anim_player.play("Idle")
 
+	movement_finished.emit(self)
 	board.on_player_finished_move(self)
 
 
 func move_to_index(tile_index: int) -> void:
+	movement_started.emit(self)
 	var tile = board.tiles[tile_index]
 	var offset: Vector3 = positions[player_index]
 	var target_pos: Vector3 = tile.player_spot.global_position + offset
 	
 	var tween = create_tween()
-	tween.tween_property(self, "global_position", target_pos, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(self, "global_position", target_pos, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	
 	await tween.finished
 	current_tile_index = tile_index
+	movement_finished.emit(self)
 	
 
 func set_on_turn(active: bool) -> void:

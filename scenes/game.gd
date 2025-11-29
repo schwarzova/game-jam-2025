@@ -18,6 +18,7 @@ var tiles: Array[Node3D] = []
 var players: Array = []
 var current_player_index: int = 0
 
+@onready var board_camera: Camera3D = $Camera3D
 @onready var players_root = $PlayersRoot
 @onready var btn_dice = $CanvasLayer/HUD/BottomRightActions/BtnDice
 @onready var btn_courage = $CanvasLayer/HUD/BottomRightActions/BtnCourage
@@ -29,6 +30,12 @@ var current_player_index: int = 0
 @onready var courage_title = $CanvasLayer/HUD/CourageCardPanel/CardTitle
 @onready var courage_desc  = $CanvasLayer/HUD/CourageCardPanel/CardDescription
 @onready var courage_ok    = $CanvasLayer/HUD/CourageCardPanel/BtnOk
+@onready var dice_result_label = $CanvasLayer/HUD/BottomRightActions/DiceResultLabel
+@onready var end_screen      = $CanvasLayer/HUD/EndScreen
+@onready var rank1_label     = $CanvasLayer/HUD/EndScreen/RankContainer/Rank1
+@onready var rank2_label     = $CanvasLayer/HUD/EndScreen/RankContainer/Rank2
+@onready var rank3_label     = $CanvasLayer/HUD/EndScreen/RankContainer/Rank3
+@onready var btn_back_to_menu = $CanvasLayer/HUD/EndScreen/BtnBackToMenu
 
 var _tunnel_choice: int = -1  # -1 = no, 0 = left, 1 = right
 var tunnel_left_is_good: Dictionary = {}
@@ -38,6 +45,8 @@ var rank: Array = []
 var card_manager: CourageCardManagerIns
 var _courage_card_ack = false
 var is_ui_locked: bool = false
+
+var game_over: bool = false
 
 func _ready() -> void:
 	_build_board()
@@ -126,6 +135,7 @@ func _setup_ui_signals():
 	btn_tunnel_left.pressed.connect(_on_tunnel_left_pressed)
 	btn_tunnel_right.pressed.connect(_on_tunnel_right_pressed)
 	courage_ok.pressed.connect(_on_courage_ok_pressed)
+	btn_back_to_menu.pressed.connect(_on_back_to_menu_pressed)
 	
 func _spawn_players(num_humans: int, num_enemies: int):
 	players.clear()
@@ -158,6 +168,8 @@ func _spawn_players(num_humans: int, num_enemies: int):
 		p.player_index = index_counter
 		p.color = human_colors[i]
 		p.current_tile_index = 0
+		p.movement_started.connect(_on_player_movement_started)
+		p.movement_finished.connect(_on_player_movement_finished)
 
 		var base_pos = start_tile.player_spot.global_position
 		var offset: Vector3 = positions[index_counter]
@@ -212,10 +224,27 @@ func _on_dice_pressed():
 		return
 
 	var roll = randi_range(1, 6)
+	_show_dice_result(roll)
 	print("Hráč ", current_player_index, " hodil ", roll)
 
 	await active_player.move_steps(roll)
 	# on_player_finished_move se zavolá uvnitř Player.move_steps -> tady jen log
+	
+func _show_dice_result(roll: int) -> void:
+	dice_result_label.text = str(roll)
+	await get_tree().create_timer(2.0).timeout
+	dice_result_label.text = ""
+
+func _on_player_movement_started(player) -> void:
+	# přepnout na kameru daného hráče
+	if is_instance_valid(player.follow_camera):
+		player.follow_camera.current = true
+
+
+func _on_player_movement_finished(player) -> void:
+	# vrátit zpět pohled na celou hrací plochu
+	if is_instance_valid(board_camera):
+		board_camera.current = true
 	
 func on_player_finished_move(player):
 	await _check_special_tile(player)
@@ -225,7 +254,7 @@ func on_player_finished_move(player):
 		rank.append(player)
 		
 	if rank.size() == 3:
-		print("Game DONE", rank)
+		_finish_game()
 		
 	_next_turn()
 	
@@ -421,3 +450,30 @@ func _card_swap_with_leader(player) -> void:
 		return
 
 	_swap_players_positions(player, leader)
+
+func _finish_game() -> void:
+	game_over = true
+	is_ui_locked = true
+
+	# schovej běžné herní UI (volitelné)
+	$CanvasLayer/HUD/BottomRightActions.visible = false
+	end_screen.visible = true
+
+	# Naplnit texty podle rank
+	if rank.size() > 0:
+		rank1_label.text = "1. místo: Hráč " + str(rank[0].player_index + 1)
+	else:
+		rank1_label.text = "1. místo: -"
+
+	if rank.size() > 1:
+		rank2_label.text = "2. místo: Hráč " + str(rank[1].player_index + 1)
+	else:
+		rank2_label.text = "2. místo: -"
+
+	if rank.size() > 2:
+		rank3_label.text = "3. místo: Hráč " + str(rank[2].player_index + 1)
+	else:
+		rank3_label.text = "3. místo: -"
+		
+func _on_back_to_menu_pressed():
+	get_tree().reload_current_scene()

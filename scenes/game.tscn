@@ -73,6 +73,10 @@ grow_vertical = 2
 scale = Vector2(0.28, 0.28)
 vertical = true
 
+[node name="DiceResultLabel" type="Label" parent="CanvasLayer/HUD/BottomRightActions"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 120
+
 [node name="BtnDice" type="TextureButton" parent="CanvasLayer/HUD/BottomRightActions"]
 layout_mode = 2
 texture_normal = ExtResource("10_trtic")
@@ -134,6 +138,32 @@ layout_mode = 2
 [node name="BtnOk" type="Button" parent="CanvasLayer/HUD/CourageCardPanel"]
 layout_mode = 2
 text = "OK"
+
+[node name="EndScreen" type="BoxContainer" parent="CanvasLayer/HUD"]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+vertical = true
+
+[node name="Title" type="Label" parent="CanvasLayer/HUD/EndScreen"]
+layout_mode = 2
+
+[node name="RankContainer" type="VBoxContainer" parent="CanvasLayer/HUD/EndScreen"]
+layout_mode = 2
+
+[node name="Rank1" type="Label" parent="CanvasLayer/HUD/EndScreen/RankContainer"]
+layout_mode = 2
+
+[node name="Rank2" type="Label" parent="CanvasLayer/HUD/EndScreen/RankContainer"]
+layout_mode = 2
+
+[node name="Rank3" type="Label" parent="CanvasLayer/HUD/EndScreen/RankContainer"]
+layout_mode = 2
+
+[node name="BtnBackToMenu" type="Button" parent="CanvasLayer/HUD/EndScreen"]
+layout_mode = 2
+text = "Zpět do menu"
 
 [node name="Start" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.99939084, -0.034899496, 0, 0.034899496, 0.99939084, 0, 0, 0)
