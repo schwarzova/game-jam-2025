@@ -39,7 +39,7 @@ player_scene = ExtResource("9_0tnpc")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.7683716e-07, 0, 0)
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.95471406, 0.08300678, -0.28571123, -0.29752484, 0.2663567, -0.9168059, 0, 0.9602937, 0.27899107, -5.3328094, -20.371653, 11.360691)
+transform = Transform3D(0.95471406, 0.08300678, -0.28571123, -0.29752484, 0.2663567, -0.9168059, 0, 0.9602937, 0.27899107, -2.9108963, -18.592484, 10.858017)
 current = true
 fov = 32.7
 
@@ -71,11 +71,13 @@ offset_bottom = 1728.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.28, 0.28)
+alignment = 1
 vertical = true
 
 [node name="DiceResultLabel" type="Label" parent="CanvasLayer/HUD/BottomRightActions"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 120
+theme_override_colors/font_color = Color(0.8107237, 0.16856742, 0.08861185, 1)
+theme_override_font_sizes/font_size = 240
 
 [node name="BtnDice" type="TextureButton" parent="CanvasLayer/HUD/BottomRightActions"]
 layout_mode = 2

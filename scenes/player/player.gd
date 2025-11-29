@@ -5,6 +5,7 @@ enum PlayerType { HUMAN, ENEMY }
 @export var player_type: PlayerType = PlayerType.HUMAN
 @export var player_index: int = 0      # 0..3
 @export var color: Color = Color(1, 1, 1)
+@export var colorBelly: Color = Color(1, 1, 1)
 @onready var active_indicator: Node3D = $ActiveIndicator
 
 var current_tile_index: int = 0
@@ -25,12 +26,21 @@ signal movement_finished(player)
 @onready var follow_camera: Camera3D = $FollowCamera
 @onready var model = $Model
 @onready var anim_player: AnimationPlayer = $playerglb/AnimationPlayer
-
+@onready var cylinder_002: MeshInstance3D = $playerglb/rig/Skeleton3D/Cylinder_002
+@onready var icosphere: MeshInstance3D = $playerglb/rig/Skeleton3D/Icosphere
+@onready var cylinder_003: MeshInstance3D = $playerglb/rig/Skeleton3D/Cylinder_003
+@onready var player: MeshInstance3D = $playerglb/rig/Skeleton3D/Player
 
 func _ready():
 	# základ – obarví model (pokud má MeshInstance3D s material override nebo modulate)
-	if model is MeshInstance3D:
-		model.modulate = color
+	var mat = StandardMaterial3D.new()
+	mat.albedo_color = color
+	var matBelly = StandardMaterial3D.new()
+	matBelly.albedo_color = colorBelly
+	cylinder_002.material_override = mat
+	cylinder_003.material_override = mat
+	icosphere.material_override = mat
+	player.material_override = matBelly
 
 func move_steps(steps: int) -> void:
 	if is_moving or board == null:

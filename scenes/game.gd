@@ -142,14 +142,19 @@ func _spawn_players(num_humans: int, num_enemies: int):
 	var start_tile = tiles[0]
 
 	# Barvy hráčů (můžeš upravit)
-	var human_colors = [
-		Color(0.2, 0.6, 1.0),
-		Color(0.2, 1.0, 0.4),
-		Color(1.0, 0.8, 0.2),
-		Color(1.0, 0.3, 0.3),
+	var colors_belly = [
+		Color(0.0, 0.408, 0.742, 1.0),
+		Color(0.0, 0.422, 0.133, 1.0),
+		Color(0.623, 0.486, 0.0, 1.0),
+		Color(0.703, 0.0, 0.105, 1.0),
 	]
-
-	var enemy_color = Color(0.5, 0.2, 0.8)
+	
+	var colors = [
+		Color(0.377, 0.674, 1.0, 1.0),
+		Color(0.2, 1.0, 0.4),
+		Color(1.0, 0.807, 0.25, 1.0),
+		Color(1.0, 0.372, 0.356, 1.0),
+	]
 
 	var positions = [
 		Vector3(-0.2, -0.3, -0.2), # hráč 0
@@ -166,7 +171,8 @@ func _spawn_players(num_humans: int, num_enemies: int):
 		p.board = self
 		p.player_type = p.PlayerType.HUMAN
 		p.player_index = index_counter
-		p.color = human_colors[i]
+		p.color = colors[index_counter]
+		p.colorBelly = colors_belly[index_counter]
 		p.current_tile_index = 0
 		p.movement_started.connect(_on_player_movement_started)
 		p.movement_finished.connect(_on_player_movement_finished)
@@ -185,7 +191,8 @@ func _spawn_players(num_humans: int, num_enemies: int):
 		e.board = self
 		e.player_type = e.PlayerType.ENEMY
 		e.player_index = index_counter
-		e.color = enemy_color
+		e.color = colors[index_counter]
+		e.colorBelly = colors_belly[index_counter]
 		e.current_tile_index = 0
 
 		var base_pos = start_tile.player_spot.global_position
