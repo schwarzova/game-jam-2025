@@ -10,10 +10,10 @@
 [ext_resource type="PackedScene" uid="uid://5uqeu87tsrs5" path="res://scenes/tiles/tile_tunnel_end.tscn" id="8_ir15t"]
 [ext_resource type="PackedScene" uid="uid://cytuh00kg0t2" path="res://scenes/player/player.tscn" id="9_0tnpc"]
 [ext_resource type="Texture2D" uid="uid://clu4mm2gtbbq4" path="res://assets/UI/ingame/kostky.png" id="10_trtic"]
-[ext_resource type="Texture2D" uid="uid://h4svmfnhady" path="res://assets/test/left.png" id="11_dinhu"]
 [ext_resource type="Texture2D" uid="uid://u4pfvcam3f0s" path="res://assets/UI/ingame/kards.png" id="11_trtic"]
-[ext_resource type="Texture2D" uid="uid://bi2bwclowy147" path="res://assets/test/right.jpg" id="12_kvuet"]
 [ext_resource type="Texture2D" uid="uid://3inskx5q6v2w" path="res://assets/UI/ingame/skok.png" id="12_trtic"]
+[ext_resource type="Texture2D" uid="uid://bqkfucxh8h0w7" path="res://assets/UI/ingame/left.png" id="13_trtic"]
+[ext_resource type="Texture2D" uid="uid://tn43uiebpola" path="res://assets/UI/ingame/right.png" id="14_trtic"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_vtaks"]
 
@@ -109,11 +109,11 @@ grow_vertical = 2
 
 [node name="LeftTunnel" type="TextureButton" parent="CanvasLayer/HUD/TunnelChoice"]
 layout_mode = 2
-texture_normal = ExtResource("11_dinhu")
+texture_normal = ExtResource("13_trtic")
 
 [node name="RightTunnel" type="TextureButton" parent="CanvasLayer/HUD/TunnelChoice"]
 layout_mode = 2
-texture_normal = ExtResource("12_kvuet")
+texture_normal = ExtResource("14_trtic")
 
 [node name="CourageCardPanel" type="BoxContainer" parent="CanvasLayer/HUD"]
 visible = false
@@ -140,6 +140,20 @@ layout_mode = 2
 [node name="BtnOk" type="Button" parent="CanvasLayer/HUD/CourageCardPanel"]
 layout_mode = 2
 text = "OK"
+
+[node name="TopLeftTurnInfo" type="HBoxContainer" parent="CanvasLayer/HUD"]
+layout_mode = 0
+offset_right = 35.0
+offset_bottom = 23.0
+scale = Vector2(1.39, 1.39)
+pivot_offset = Vector2(-4.43, -4.41)
+
+[node name="TurnText" type="Label" parent="CanvasLayer/HUD/TopLeftTurnInfo"]
+layout_mode = 2
+
+[node name="TurnColor" type="ColorRect" parent="CanvasLayer/HUD/TopLeftTurnInfo"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
 
 [node name="EndScreen" type="BoxContainer" parent="CanvasLayer/HUD"]
 visible = false

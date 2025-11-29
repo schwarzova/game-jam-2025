@@ -8,6 +8,7 @@ albedo_color = Color(0.50503993, 0.40465522, 0, 1)
 
 [node name="TileTunnelEnd" instance=ExtResource("1_apkx6")]
 kind = 6
+color_mesh_path = NodePath("portal-out/tyle-test_001")
 
 [node name="MeshInstance3D" parent="." index="0"]
 visible = false
@@ -15,3 +16,5 @@ material_override = SubResource("StandardMaterial3D_apkx6")
 
 [node name="portal-out" parent="." index="2" instance=ExtResource("2_x7qdf")]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.014344215, 0.078458786, 0.13165462)
+
+[editable path="portal-out"]

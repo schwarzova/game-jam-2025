@@ -8,6 +8,7 @@ albedo_color = Color(0.97793025, 0.84577215, 0.57791513, 1)
 
 [node name="TileTunnelStart" instance=ExtResource("1_gf0tp")]
 kind = 5
+color_mesh_path = NodePath("portal/tyle-test")
 
 [node name="MeshInstance3D" parent="." index="0"]
 visible = false
@@ -15,3 +16,5 @@ material_override = SubResource("StandardMaterial3D_gf0tp")
 
 [node name="portal" parent="." index="2" instance=ExtResource("3_naf4c")]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.009003878, 0.06459063, 0.13566107)
+
+[editable path="portal"]

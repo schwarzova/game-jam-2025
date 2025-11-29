@@ -31,6 +31,9 @@ var current_player_index: int = 0
 @onready var courage_desc  = $CanvasLayer/HUD/CourageCardPanel/CardDescription
 @onready var courage_ok    = $CanvasLayer/HUD/CourageCardPanel/BtnOk
 @onready var dice_result_label = $CanvasLayer/HUD/BottomRightActions/DiceResultLabel
+@onready var top_left_info      = $CanvasLayer/HUD/TopLeftTurnInfo
+@onready var turn_label_player  = $CanvasLayer/HUD/TopLeftTurnInfo/TurnText
+@onready var turn_color_rect    = $CanvasLayer/HUD/TopLeftTurnInfo/TurnColor
 @onready var end_screen      = $CanvasLayer/HUD/EndScreen
 @onready var rank1_label     = $CanvasLayer/HUD/EndScreen/RankContainer/Rank1
 @onready var rank2_label     = $CanvasLayer/HUD/EndScreen/RankContainer/Rank2
@@ -88,14 +91,14 @@ func _build_board():
 			index += 1
 			
 func _setup_special_tiles():
-	_make_ladder(5, 23)
-	_make_ladder(16, 38)
-	_make_ladder(40, 88)
-	_make_ladder(59, 95)
+	_make_ladder(5, 23, Color(1.0, 1.0, 1.0, 1.0))
+	_make_ladder(16, 38, Color(0.953, 0.0, 0.704, 1.0))
+	_make_ladder(40, 88, Color())
+	_make_ladder(59, 95,  Color(0.726, 0.559, 0.019, 1.0))
 
-	_make_tunnel(30, 12)
-	_make_tunnel(65, 8)
-	_make_tunnel(10, 4)
+	_make_tunnel(30, 12, Color(1.0, 1.0, 1.0, 1.0))
+	_make_tunnel(65, 8, Color(0.953, 0.0, 0.704, 1.0))
+	_make_tunnel(10, 4,Color())
 	
 func _replace_tile(index: int, scene: PackedScene) -> Node3D:
 	var old_tile = tiles[index]
@@ -109,22 +112,26 @@ func _replace_tile(index: int, scene: PackedScene) -> Node3D:
 
 	return new_tile
 	
-func _make_ladder(start_index: int, end_index: int):
+func _make_ladder(start_index: int, end_index: int, color: Color):
 	var start_tile = _replace_tile(start_index, tile_ladder_start_scene)
 	start_tile.jump_target_index_1 = end_index
 	start_tile.kind = start_tile.TileKind.LADDER_START
+	start_tile.accent_color = color
 
 	var end_tile = _replace_tile(end_index, tile_ladder_end_scene)
 	end_tile.kind = end_tile.TileKind.LADDER_END
+	end_tile.accent_color = color
 	
-func _make_tunnel(start_index: int, good_index: int):
+func _make_tunnel(start_index: int, good_index: int, color: Color):
 	var start_tile = _replace_tile(start_index, tile_tunnel_start_scene)
 	start_tile.jump_target_index_1 = good_index
 	start_tile.jump_target_index_2 = 0 # Start index
 	start_tile.kind = start_tile.TileKind.TUNNEL_START
+	start_tile.accent_color = color
 
 	var end_tile = _replace_tile(good_index, tile_tunnel_end_scene)
 	end_tile.kind = end_tile.TileKind.TUNNEL_END
+	end_tile.accent_color = color
 	
 	tunnel_left_is_good[start_index] = randf() < 0.5
 	
@@ -213,6 +220,8 @@ func _start_turn():
 		return
 	
 	active_player.set_on_turn(true)
+	turn_label_player.text = "Na tahu: hráč " + str(active_player.player_index + 1)
+	turn_color_rect.color = active_player.color
 	# tady můžeš updatnout UI – zvýraznit aktuálního hráče atd.
 	print("Na tahu je hráč: ", current_player_index, " typ: ", active_player.player_type)
 

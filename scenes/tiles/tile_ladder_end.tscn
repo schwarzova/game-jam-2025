@@ -8,6 +8,7 @@ albedo_color = Color(3.128499e-07, 0.28216192, 0.24891537, 1)
 
 [node name="TileLadderEnd" instance=ExtResource("1_tr8uq")]
 kind = 4
+color_mesh_path = NodePath("tile-leaderEnd/Cylinder_007")
 
 [node name="MeshInstance3D" parent="." index="0"]
 visible = false
@@ -15,3 +16,5 @@ material_override = SubResource("StandardMaterial3D_tr8uq")
 
 [node name="tile-leaderEnd" parent="." index="2" instance=ExtResource("2_cierj")]
 transform = Transform3D(1.9106855e-15, 4.371139e-08, 1, 1, -4.371139e-08, 0, 4.371139e-08, 1, -4.371139e-08, 0.16966027, -1.2112281, -0.5030305)
+
+[editable path="tile-leaderEnd"]
